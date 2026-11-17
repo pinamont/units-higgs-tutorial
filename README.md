@@ -100,7 +100,7 @@ Let's start with an exercise. We want to generate events at LO for the process `
     - `tag_1_delphes_events.root `containing the output from Delphes, in ROOT format
 
 #### To read Delphes outputs:
-- download the file [`MyReader.C`](), and put it inside the directory `Delphes/examples` (note: it's inside MG5 directory)
+- download the file [`MyReader.C`](https://github.com/pinamont/units-higgs-tutorial/blob/main/MyReader.C), and put it inside the directory `Delphes/examples` (note: it's inside MG5 directory)
 - open the file with a text editor
 - check that the proper lines are there and uncommented (you might need to remove the `//` in front of some of the lines to uncomment them), in order to create, fill and show a histogram, then save the file
 - run the macro on the latest MG5 run output: from a terminal, go to the directory Delphes and type
@@ -119,7 +119,7 @@ root -l 'examples/MyReader.C("../ttbar/Events/run_XX/tag_1_delphes_events.root")
 - everything should be done at ``\sqrt{s} = 8`` TeV, considering the data integrated luminosity of 25 fb``^{-1}``
 
 #### Where to get the data:
-- find the Delphes output here: `data_events.root`
+- find the Delphes output here: [`data_events.root`](https://github.com/pinamont/units-higgs-tutorial/blob/main/data_events.root)
     - **HINT**: to get it via terminal you can right-click on the link, select "copy link", then use it to download the file where you want with wegt (e.g. typing `wget https://twiki.cern.ch/twiki/pub/Main/UnitsHiggsTutorial2024/data_events.root`)
 
 #### Generate the signal:
@@ -143,7 +143,7 @@ root -l 'examples/MyReader.C("../ttbar/Events/run_XX/tag_1_delphes_events.root")
     - set the `CME` to 8 TeV (4000 GeV each beam)
 
 #### How to produce the final plot:
-- look at the code [`MyHiggs4l.C`]()
+- look at the code [`MyHiggs4l.C`](https://github.com/pinamont/units-higgs-tutorial/blob/main/MyHiggs4l.C)
     - use it as a template for your macro to create a histogram out of each Delphes output files (signal, background, data)
     - the two inputs to the macro are the name of the root file with the Delphes output and the output file where to store the histogram
     - example:
@@ -152,7 +152,7 @@ root -l -b -q 'examples/MyHiggs4l.C("../h4lep/Events/run_01/tag_1_delphes_events
 root -l -b -q 'examples/MyHiggs4l.C("../zz4lep/Events/run_01/tag_1_delphes_events.root","background.root")'
 root -l -b -q 'examples/MyHiggs4l.C("data_events.root","data.root")'
 ```
-- then look at the code [`MyHistMerger.C`]()
+- then look at the code [`MyHistMerger.C`](https://github.com/pinamont/units-higgs-tutorial/blob/main/MyHistMerger.C)
     - use it as a template for your code to read the three inputs and merge them in a final plot
     - note the signal x-sec multiplied by 10
 
