@@ -1,139 +1,158 @@
 # HEP MC and Data Analysis Tutorial
 
-Tutorial per il corso di Fisica Nucleare e Subnucleare, Dipartimento di Fisica, Università degli Studi di Trieste.
+*Tutorial per il corso di Fisica Nucleare e Subnucleare, Dipartimento di Fisica, Università degli Studi di Trieste.*
 
-## HEP MC and Data Analysis Tutorial 2024-2026
-References
-MadGraph
-Delphes
-ROOT
-To start
-Generate Processes with MadGraph+Pythia8+Delphes
-Main exercise: Higgs to 4 leptons
+## Index
 
-References
+  - [References](#references)
+  - [To start](#to-start)
+  - [Main exercise](#main-exercise)
 
-MadGraph
-homepage: http://madgraph.hep.uiuc.edu/
-download page: https://launchpad.net/mg5amcnlo
+## References
 
-Delphes
+  - MadGraph
+    - homepage: http://madgraph.hep.uiuc.edu/
+    - download page: https://launchpad.net/mg5amcnlo
 
-homepage: https://cp3.irmp.ucl.ac.be/projects/delphes
-list of branches: https://cp3.irmp.ucl.ac.be/projects/delphes/wiki/WorkBook/RootTreeDescription
-to install it from MG5 shell: install Delphes
+  - Delphes
+    - homepage: https://cp3.irmp.ucl.ac.be/projects/delphes
+    - list of branches: https://cp3.irmp.ucl.ac.be/projects/delphes/wiki/WorkBook/RootTreeDescription
+    - to install it from MG5 shell: `install Delphes`
 
-ROOT
-homepage: http://root.cern.ch/drupal/
-reference guide: http://root.cern.ch/root/html/
+  - ROOT
+    - homepage: http://root.cern.ch/drupal/
+    - reference guide: http://root.cern.ch/root/html/
 
+## To start
 
-To start
-Connect to the server:
+#### Connect to the server:
+  - from a web browser, go to: https://jhub-vre.cern.ch/
+  - request the creation of an account (indicate "Higgs tutorial 2026" as motivation)
+  - if already have an account, enter with credentials
+  - to launch the server, select the option "ROOT Higgs 2024" and click "Start" at the bottom of the page
+  - open a terminal (File -> New -> Terminal)
 
-from a web browser, go to: https://jhub-vre.cern.ch/
-request the creation of an account (indicate "Higgs tutorial 2026" as motivation)
-if already have an account, enter with credentials
-to launch the server, select the option "ROOT Higgs 2024" and click "Start" at the bottom of the page
-open a terminal (File -> New -> Terminal)
-Getting MadGraph:
+#### Getting MadGraph:
+- create a directory `HiggsTutorial`, which will be our "working directory":
+```
+mkdir HiggsTutorial
+```
+- enter the directory:
+```
+cd HiggsTutorial
+```
+- download the latest version of `MadGraph5`:
+```
+wget https://launchpad.net/mg5amcnlo/3.0/3.8.x/+download/MG5_aMC_v3.8.1.tar.gz
+```
+(see this website in case you want / need a different version: https://launchpad.net/mg5amcnlo )
+- extract the content:
+```
+tar -xvzf MG5_aMC_v3.8.1.tar.gz
+```
+- once extracted, make sure to have a directory called `MG5_aMC_v*` (called our "MG5 directory") inside our "working directory" (`HiggsTutorial`)
+- enter the MG5 directory:
+```
+cd MG5_aMC_v3_8_1
+```
+- test that you can launch MadGraph, by typing:
+```
+./bin/mg5_aMC
+```
+- you are now in the "MG5 shell"
+- exit the MG5 shell with `Ctrl+D`
 
-create a directory HiggsTutorial, which will be our "working directory": mkdir HiggsTutorial
-enter the directory: cd HiggsTutorial
-download the latest version of MadGraph5: wget https://launchpad.net/mg5amcnlo/3.0/3.8.x/+download/MG5_aMC_v3.8.1.tar.gz (see this website in case you want / need a different version: https://launchpad.net/mg5amcnlo)
-extract the content: tar -xvzf MG5_aMC_v3.8.1.tar.gz
-once extracted, make sure to have a directory called MG5_aMC_v* (called our "MG5 directory") inside our "working directory" (HiggsTutorial)
-enter the MG5 directory: cd MG5_aMC_v3_8_1
-test that you can launch MadGraph: type ./bin/mg5_aMC
-you are now in the "MG5 shell"
-exit the MG5 shell with Ctrl+D
-MadGraph preparation:
+#### MadGraph preparation:
+- modify the MG5 settings for the used web browser and text editor: modify the text file `input/mg_configuration.txt` accordingly:
+  - the `#` symbol at the beginning of a line means the line is ignored => need to remove it to have the line read by MadGraph
+- enter the MG5 shell: from the MG5 directory, from a terminal type `./bin/mg5_aMC`
+- type install pythia8 to install Pythia8 (parton shower and hadronisation software) - it will take a while...
+- type install Delphes to install the latest version of Delphes (detector simulation and object reconstruction fast simulation software) - it will take a while...
 
-modify the MG5 settings for the used web browser and text editor: modify the text file input/mg_configuration.txt accordingly:
-the # symbol at the beginning of a line means the line is ignored => need to remove it to have the line read by MadGraph
-enter the MG5 shell: from the MG5 directory, from a terminal type ./bin/mg5_aMC
-type install pythia8 to install Pythia8 (parton shower and hadronisation software) - it will take a while...
-type install Delphes to install the latest version of Delphes (detector simulation and object reconstruction fast simulation software) - it will take a while...
+### Generate Processes with MadGraph+Pythia8+Delphes
+Let's start with an exercise. We want to generate events at LO for the process ``pp \rightarrow t\bar{t}``, with a CME of 7 TeV and a top-quark mass of 172.5 GeV.
+- from the MG5 shell, type `generate p p > t t~`
+- then create the output directory, still from the "MG5 shell", typing `output ttbar`
+- exit MG5 (`Ctrl+D`)
+- enter the ttbar directory: `cd ttbar`
+- enter the MadEvent shell: `./bin/generate_events`
+- NOTE: the steps 3-5 can be replaced by launching the event generation directly from inside the MG5 shell, by just typing launch after having created the ttbar output directory
+- can now switch `ON` and `OFF` the various additional steps you want to run, besides the MG5 event generation: we want both Pythia and Delphes, therefore:
+    - switch Pythia to ON (type 1 and ENTER)
+    - switch Delphes to ON (type 2 and ENTER)
+- now we are asked to modify the cards: we want to change both the CME and the top mass, so we have to modify both `run_card.dat` and `param_card.dat`
+- to modify `run_card.dat` type 2, then ENTER
+- find the lines with the energies of the two beams and set them to 3500 GeV each
+- when finished, save the file and exit
+- now you can modify `param_card.dat` by typing 1, then ENTER
+- find the line like `6 1.730000e+02 # MT`, and set `1.725000e+2` instead of `1.730000e+02`
+- when finished, save the file and exit
+- then press `ENTER` and the computation will start
+- it will take several minutes, after which we should get the results
 
-Generate Processes with MadGraph+Pythia8+Delphes
-Let's start with an exercise. We want to generate events at LO for the process pp -> ttbar, with a CME of 7 TeV and a top mass of 172.5 GeV.
+#### Checking the results:
+- the results can be quickly checked by opening the file `ttbar/crossx.html`
+- the directory `ttbar/Events` will instead contain the generated events (split into sub-directories like `run_01` and new ones if we run the event generation multiple times from the same directory)
+- inside `ttbar/Events/run_01` we can see different files; the main ones are:
+    - `unweighted_events.lhe.gz` containing the events generated by MG5
+    - `tag_1_pythia8.log` containing a summary of the settings used to run MG5 and Pythia, plus the full output from Pythia for a few events
+    - `tag_1_pythia8_events.hepmc.gz` with the full Pythia output
+    - `tag_1_delphes_events.root `containing the output from Delphes, in ROOT format
 
-from the MG5 shell, type generate p p > t t~
-then create the output directory, still from the "MG5 shell", typing output ttbar
-exit MG5 (Ctrl+D)
-enter the ttbar directory: cd ttbar
-enter the MadEvent shell: ./bin/generate_events
-NOTE: the steps 3-5 can be replaced by launching the event generation directly from inside the MG5 shell, by just typing launch after having created the ttbar output directory
-can now switch ON and OFF the various additional steps you want to run, besides the MG5 event generation: we want both Pythia and Delphes, therefore:
-switch Pythia to ON (type 1 and ENTER)
-switch Delphes to ON (type 2 and ENTER)
-now we are asked to modify the cards: we want to change both the CME and the top mass, so we have to modify both run_card.dat and param_card.dat
-to modify run_card.dat type 2, then ENTER
-find the lines with the energies of the two beams and set them to 3500 GeV each
-when finished, save the file and exit
-now you can modify param_card.dat by typing 1, then ENTER
-find the line like 6 1.730000e+02 # MT, and set 1.725000e+2 instead of 1.730000e+02
-when finished, save the file and exit
-then press ENTER and the computation will start
-it will take several minutes, after which we should get the results
-Checking the results:
+#### To read Delphes outputs:
+- download the file [`MyReader.C`](), and put it inside the directory `Delphes/examples` (note: it's inside MG5 directory)
+- open the file with a text editor
+- check that the proper lines are there and uncommented (you might need to remove the `//` in front of some of the lines to uncomment them), in order to create, fill and show a histogram, then save the file
+- run the macro on the latest MG5 run output: from a terminal, go to the directory Delphes and type
+```
+root -l 'examples/MyReader.C("../ttbar/Events/run_XX/tag_1_delphes_events.root")'
+```
+- you need to set the proper run number instead of the "XX" of course (e.g. "01")
 
-the results can be quickly checked by opening the file ttbar/crossx.html
-the directory ttbar/Events will instead contain the generated events (split into sub-directories like run_01 and new ones if we run the event generation multiple times from the same directory)
-inside ttbar/Events/run_01 we can see different files; the main ones are:
-unweighted_events.lhe.gz containing the events generated by MG5
-tag_1_pythia8.log containing a summary of the settings used to run MG5 and Pythia, plus the full output from Pythia for a few events
-tag_1_pythia8_events.hepmc.gz with the full Pythia output
-tag_1_delphes_events.root containing the output from Delphes, in ROOT format
-To read Delphes outputs:
+## Main exercise
 
-download the file MyReader.C from here: MyReader.C, and put it inside the directory Delphes/examples (note: it's inside MG5 directory)
-open the file with a text editor
-check that the proper lines are there and uncommented (you might need to remove the // in front of some of the lines to uncomment them), in order to create, fill and show a histogram, then save the file
-run the macro on the latest MG5 run output: from a terminal, go to the directory Delphes and type root -l 'examples/MyReader.C("../ttbar/Events/run_XX/tag_1_delphes_events.root")'
-you need to set the proper run number instead of the "XX" of course (e.g. "01")
+### Higgs to 4 leptons
 
+#### Goal:
+- select events coming from ``H \rightarrow ZZ \rightarrow \ell\ell\ell\ell`` and to produce a histogram with the reconstructed Higgs mass in these events
+- compare "data" with MC simulation for Higgs signal and ``ZZ`` background
+- everything should be done at ``\sqrt{s} = 8`` TeV, considering the data integrated luminosity of 25 fb``^{-1}``
 
-Main exercise: Higgs to 4 leptons
-Goal:
+#### Where to get the data:
+- find the Delphes output here: `data_events.root`
+    - **HINT**: to get it via terminal you can right-click on the link, select "copy link", then use it to download the file where you want with wegt (e.g. typing `wget https://twiki.cern.ch/twiki/pub/Main/UnitsHiggsTutorial2024/data_events.root`)
 
-select events coming from h->ZZ->4 lep and to produce a histogram with the reconstructed Higgs mass in these events
-compare "data" with MC simulation for Higgs signal and ZZ background
-everything should be done at CME = 8 TeV, considering the data integrated luminosity of 25 $fb^{-1}$
-Where to get the data:
+#### Generate the signal:
+- as usual, `./bin/mg5_aMC`
+- **IMPORTANT**: before the generate command, type `import model heft`
+- Type: `generate p p > h > l+ l- l+ l-`
+- Then as usual: `output h4lep`
+- exit MG5, enter `h4lep` directory, enter MadEvent: `./bin/generate_events`
+- set Pythia ON, Delphes ON, the rest OFF
+- when prompted, modify the run card:
+    - set the `CME` to 8 TeV (4000 GeV each beam)
+- **NOTE**: later we will multiply the signal x-sec given by MG5 by 10 (at LO both the x-sec and the BR are underestimated)
 
-find the Delphes output here: data_events.root
-HINT: to get it via terminal you can right-click on the link, select "copy link", then use it to download the file where you want with wegt (e.g. typing =wget https://twiki.cern.ch/twiki/pub/Main/UnitsHiggsTutorial2024/data_events.root =)
-Generate the signal:
+#### Generate the background (ZZ->4lep):
+- as usual, `./bin/mg5_aMC`
+- `generate p p > l+ l- l+ l- /h` (the `/h` excludes the Higgs as intermediate state)
+- `output zz4lep`
+- exit MG5, enter `zz4lep` directory, enter MadEvent: `./bin/generate_events`
+- set Pythia ON, Delphes ON, the rest OFF
+- when prompted, modify the run card:
+    - set the `CME` to 8 TeV (4000 GeV each beam)
 
-as usual, ./bin/mg5_aMC
-IMPORTANT: before the generate command, type import model heft
-Type: generate p p > h > l+ l- l+ l-
-Then as usual: output h4lep
-exit MG5, enter h4lep directory, enter MadEvent: ./bin/generate_events
-set Pythia ON, Delphes ON, the rest OFF
-when prompted, modify the run card:
-set the CME to 8 TeV (4000 GeV each beam)
-NOTE: later we will multiply the signal x-sec given by MG5 by 10 (at LO both the x-sec and the BR are underestimated)
-Generate the background (ZZ->4lep):
-
-as usual, ./bin/mg5_aMC
-generate p p > l+ l- l+ l- /h (the /h excludes the Higgs as intermediate state)
-output zz4lep
-exit MG5, enter zz4lep directory, enter MadEvent: ./bin/generate_events
-set Pythia ON, Delphes ON, the rest OFF
-when prompted, modify the run card:
-set the CME to 8 TeV (4000 GeV each beam)
-How to produce the final plot:
-
-look at the code MyHiggs4l.C: MyHiggs4l.C
-use it as a template for your macro to create a histogram out of each Delphes output files (signal, background, data)
-the two inputs to the macro are the name of the root file with the Delphes output and the output file where to store the histogram
-example:
+#### How to produce the final plot:
+- look at the code [`MyHiggs4l.C`]()
+    - use it as a template for your macro to create a histogram out of each Delphes output files (signal, background, data)
+    - the two inputs to the macro are the name of the root file with the Delphes output and the output file where to store the histogram
+    - example:
+```
 root -l -b -q 'examples/MyHiggs4l.C("../h4lep/Events/run_01/tag_1_delphes_events.root","signal.root")'
 root -l -b -q 'examples/MyHiggs4l.C("../zz4lep/Events/run_01/tag_1_delphes_events.root","background.root")'
 root -l -b -q 'examples/MyHiggs4l.C("data_events.root","data.root")'
-then look at the code MyHistMerger.C: MyHistMerger.C
-use it as a template for your code to read the three inputs and merge them in a final plot
-note the signal x-sec multiplied by 10
+```
+- then look at the code [`MyHistMerger.C`]()
+    - use it as a template for your code to read the three inputs and merge them in a final plot
+    - note the signal x-sec multiplied by 10
 
